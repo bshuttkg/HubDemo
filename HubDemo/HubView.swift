@@ -59,9 +59,7 @@ private struct SectionView: View {
       } else {
         ForEach(offers) { offer in
           Button(action: {
-            withAnimation {
-              onOfferTapped(offer)
-            }
+            onOfferTapped(offer)
           }, label: {
             offer
           })
