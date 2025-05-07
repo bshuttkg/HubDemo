@@ -18,12 +18,12 @@ final class HubViewModel {
 
   // Top section
   var notCompletedOffers: [Offer] {
-    offers.filter(\.isFullyCompleted)
+    offers.filter { !$0.isFullyCompleted }
   }
 
   // Bottom section
   var completedOffers: [Offer] {
-    offers.filter { !$0.isFullyCompleted }
+    offers.filter(\.isFullyCompleted)
   }
 
   /// If the offer is in the `inProgress` state, update the state to `transient`
