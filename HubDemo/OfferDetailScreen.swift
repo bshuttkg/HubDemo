@@ -5,6 +5,8 @@ struct OfferDetailScreen: View {
 
   var body: some View {
     offer.color
+      .ignoresSafeArea(edges: .bottom)
       .navigationTitle("\(Self.self)")
+      .navigationBarTitleDisplayMode(.inline)
   }
 }

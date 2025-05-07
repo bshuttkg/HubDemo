@@ -5,8 +5,8 @@ import SwiftUI
 struct Offer: Identifiable, Hashable {
   enum State: Hashable {
     case inProgress // Aka portrait
-    case transient // Completed but on the screen!
-    case completed // Aka landscape
+    case transientCompleted // Completed, but still portrait!
+    case fullyCompleted // Aka landscape
   }
 
   var id: UUID
@@ -14,11 +14,11 @@ struct Offer: Identifiable, Hashable {
   var state: State
 
   // Use switch instead of != to ensure programmer edits if a case is added
-  var isFinished: Bool {
+  var isCompleted: Bool {
     switch state {
     case .inProgress:
       false
-    case .transient, .completed:
+    case .transientCompleted, .fullyCompleted:
       true
     }
   }
@@ -31,9 +31,9 @@ extension Offer: View {
     switch state {
     case .inProgress:
       "xmark.circle.fill"
-    case .transient:
+    case .transientCompleted:
       "pencil.circle.fill"
-    case .completed:
+    case .fullyCompleted:
       "checkmark.circle.fill"
     }
   }
@@ -42,32 +42,32 @@ extension Offer: View {
     switch state {
     case .inProgress:
       "in_progress"
-    case .transient:
+    case .transientCompleted:
       "transient"
-    case .completed:
+    case .fullyCompleted:
       "completed"
     }
   }
 
   private var height: CGFloat {
     switch state {
-    case .completed:
-      100
-    case .inProgress, .transient:
+    case .inProgress, .transientCompleted:
       200
+    case .fullyCompleted:
+      100
     }
   }
 
   private var backgroundColor: Color {
-    isFinished ? .white : color
+    isCompleted ? .white : color
   }
 
   private var foregroundColor: Color {
-    isFinished ? color : .white
+    isCompleted ? color : .white
   }
 
   private var borderColor: Color? {
-    isFinished ? color : nil
+    isCompleted ? color : nil
   }
 
   var body: some View {

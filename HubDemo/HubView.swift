@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct HubView: View {
+  @Environment(\.scenePhase) private var scenePhase
   @State private var viewModel = HubViewModel()
   var onPushOfferDetails: (Offer) -> Void
 
@@ -19,10 +20,15 @@ struct HubView: View {
         onPushOfferDetails: onPushOfferDetails
       )
     }
-    .listStyle(PlainListStyle())
+    .listStyle(.plain)
     .navigationTitle("\(Self.self)")
     .onAppear {
       viewModel.onAppear()
+    }
+    .onChange(of: scenePhase) {
+      if scenePhase == .active {
+        viewModel.onAppear()
+      }
     }
   }
 }
@@ -36,9 +42,13 @@ private struct SectionView: View {
   var onPushOfferDetails: (Offer) -> Void
 
   private func onOfferTapped(_ offer: Offer) {
-    viewModel.completeOffer(offer)
-    if offer.state == .transient {
+    switch offer.state {
+    case .inProgress:
+      viewModel.completeOffer(offer)
+    case .transientCompleted:
       onPushOfferDetails(offer)
+    case .fullyCompleted:
+      break
     }
   }
 
